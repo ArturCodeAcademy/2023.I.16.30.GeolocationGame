@@ -44,7 +44,7 @@ public class StartMenu : MonoBehaviour
 
 	public void OnStartButtonClicked()
 	{
-		//Container.SelectedLocationCoords = _coords;
+		Container.SelectedCoords = _coords;
 		SceneManager.LoadScene("Level");
 	}
 
