@@ -20,11 +20,12 @@ public class DataRequester : MonoBehaviour
 
 	private async Task GetResponseAsync(LocationCoords coords)
 	{
-		string url =	$"{BASE_URL}" +
+		string url = $"{BASE_URL}" +
 						$"latitude={coords.Latitude.ToString().Replace(',', '.')}" +
 						$"&longitude={coords.Longitude.ToString().Replace(',', '.')}" +
 						$"&hourly=temperature_2m" +
-						$"&hourly=windspeed_10m";
+						$"&hourly=windspeed_10m" +
+						$"&hourly=winddirection_10m";
 
 		string response = await _client.GetStringAsync(url);
 		
