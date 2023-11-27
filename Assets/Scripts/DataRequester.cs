@@ -40,6 +40,8 @@ public class DataRequester : MonoBehaviour
 			mData.Temperature = data.Hourly.Temperature[i];
 			mData.WindSpeed = data.Hourly.WindSpeed[i];
 			mData.WindDirection = data.Hourly.WindDirection[i];
+
+			MeteoDataList.Add(mData);
 		}
 
 		IsDataReady = true;
