@@ -9,8 +9,11 @@ public class LevelGenerator : MonoBehaviour
     public List<LevelColumn> Columns { get; private set; } = new List<LevelColumn>();
 
     [SerializeField] private LevelColumn _columnPrefab;
+	[SerializeField] private GameObject _ground;
+	[SerializeField] private GameObject _stop;
+	[SerializeField] private SpriteRenderer _bg;
 
-    [Space(5)]
+	[Space(5)]
     [SerializeField, Min(1)] private float _minInterval;
     [SerializeField, Min(1)] private float _maxInterval;
     [SerializeField, Min(1)] private float _minHeight;
@@ -59,5 +62,12 @@ public class LevelGenerator : MonoBehaviour
         float posX = Columns[0].transform.position.x;
         float posY = Columns[0].GetComponent<SpriteRenderer>().size.y;
         _player.position = new Vector3(posX, posY, 0);
+
+		x = Columns[^1].transform.position.x + 1;
+		_ground.transform.localScale = new Vector3(x, 1, 1);
+        _ground.transform.position = new Vector3(x / 2 - 0.5f, _ground.transform.position.y);
+		_stop.transform.position = new Vector3(x, 0);
+		_bg.size = new Vector2(x, _bg.size.y);
+        _bg.transform.position = new Vector3(x / 2 - 0.5f, _bg.transform.position.y);
 	}
 }
