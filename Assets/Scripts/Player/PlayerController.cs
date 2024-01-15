@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -14,11 +15,20 @@ public class PlayerController : MonoBehaviour
 	public event Action<Collision2D> OnLand;
 	public event Action OnFallOutOfLevel;
 
+	[SerializeField] private DataRequester _dataRequester;
+
 	private Rigidbody2D _rb;
 
 	private void Awake()
 	{
 		_rb = GetComponent<Rigidbody2D>();
+		_rb.bodyType = RigidbodyType2D.Static;
+	}
+
+	private IEnumerator Start()
+	{
+		yield return new WaitUntil(() => _dataRequester.IsDataReady);
+		_rb.bodyType = RigidbodyType2D.Dynamic;
 	}
 
 	private void Update()

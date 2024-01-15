@@ -21,8 +21,14 @@ public class WindEffectParticle : MonoBehaviour
 		_playerWindEffect.OnMeteoDataChanged -= OnMeteoDataChanged;
 	}
 
-	private void OnMeteoDataChanged(MeteoData? meteoData)
+	private void OnMeteoDataChanged(MeteoData meteoData)
 	{
+		if (meteoData == null)
+		{
+			_particleSystem.Stop();
+			return;
+		}
+
 		transform.rotation = Quaternion.Euler(0, 0, meteoData.WindDirection);
 		_particleSystem.startSpeed = meteoData.WindSpeed;
 	}
