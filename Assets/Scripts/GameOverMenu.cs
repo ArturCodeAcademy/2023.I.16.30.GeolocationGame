@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverMenu : MonoBehaviour
 {
 	[SerializeField] private PlayerController _playerController;
+	[SerializeField] private TMP_Text _titleText;
 
     private const int MAIN_MENU_SCENE_INDEX = 0;
 
@@ -11,6 +13,7 @@ public class GameOverMenu : MonoBehaviour
 	{
 		_playerController.OnFallOutOfLevel += Show;
 		gameObject.SetActive(false);
+		_titleText.text = "Pause";
 	}
 
 	private void OnDestroy()
@@ -21,6 +24,7 @@ public class GameOverMenu : MonoBehaviour
 	private void Show()
 	{
 		gameObject.SetActive(true);
+		_titleText.text = "Game Over";
 	}
 
 	public void LoadMainMenu()

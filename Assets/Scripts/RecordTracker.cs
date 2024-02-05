@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class RecordTracker : MonoBehaviour
@@ -10,15 +11,24 @@ public class RecordTracker : MonoBehaviour
 
 	[SerializeField] private PlayerController _playerController;
 
-	public List<Record> Records { get; private set; }
+	public static List<Record> Records { get; private set; }
 	public Record CurrentRecord { get; private set; }
 
 	private const string RECORDS_FILE = "records";
-	private const int RECORDS_COUNT = 10;
+	public const int RECORDS_COUNT = 10;
 
 	private void Awake()
 	{
 		CurrentRecord = new Record();
+
+		if (Records != null)
+		{
+			Records = Records.OrderByDescending(r => r.Distance)
+							.Take(RECORDS_COUNT)
+							.ToList();
+			return;
+		}
+
 		string json = Resources.Load<TextAsset>(RECORDS_FILE).text;
 		Records = JsonConvert.DeserializeObject<List<Record>>(json);
 
@@ -45,6 +55,7 @@ public class RecordTracker : MonoBehaviour
 		{
 			CurrentRecord.Distance = distance;
 			CurrentRecord.Time = Time.time;
+			Records.Sort((a, b) => b.Distance.CompareTo(a.Distance));
 			RecordUpdated?.Invoke();
 		}
 	}
@@ -61,8 +72,11 @@ public class RecordTracker : MonoBehaviour
 		}
 
 		Records.Sort((a, b) => b.Distance.CompareTo(a.Distance));
+
+		if (Records.Count > RECORDS_COUNT)
+			Records = Records.Take(RECORDS_COUNT).ToList();
 		
-		string json = JsonConvert.SerializeObject(Records);
+		string json = JsonConvert.SerializeObject(Records, Formatting.Indented);
 		File.WriteAllText(Application.dataPath + "/Resources/" + RECORDS_FILE + ".json", json);
 	}
 }
